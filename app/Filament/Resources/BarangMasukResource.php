@@ -18,6 +18,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
 
 class BarangMasukResource extends Resource
 {
@@ -35,37 +36,39 @@ class BarangMasukResource extends Resource
             ->schema([
                 Section::make('Informasi Pengrajin')
                     ->schema([
-                        TextInput::make('Pengrajin')
+                        TextInput::make('pengrajin')
                             ->required(),
-                        DatePicker::make('Tanggal')
+                        DatePicker::make('tanggal_masuk')
                             ->required(),
                     ])->columns(2),
                 Section::make('Informasi Produk')
                     ->schema([
-                        TextInput::make('Nama Produk')
+                        TextInput::make('nama_produk')
                             ->required(),
-                        TextInput::make('Warna')
+                        TextInput::make('warna')
                             ->required(),
-                        TextInput::make('Kategori')
+                        TextInput::make('kategori')
                             ->required(),
-                        Select::make('Kondisi')
+                        Select::make('kondisi')
                             ->options([
                                 'Baru' => 'Baru',
                                 'Bekas' => 'Bekas'
                             ])
                             ->native(false)
                             ->required(),
-                        TextInput::make('Harga')
+                        TextInput::make('harga')
                             ->required(),
-                        TextInput::make('Status Produk')
+                        TextInput::make('status')
+                            ->label('Status Barang')
                             ->placeholder('Aktif')
-                            ->disabled(),
-                        TextInput::make('Stok')
+                            ->readOnly(true)
+                            ->default('Aktif'),
+                        TextInput::make('stok')
                             ->numeric()
                             ->required(),
-                        TextInput::make('SKU')
+                        TextInput::make('sku')
                             ->required(),
-                        RichEditor::make('Deskripsi')
+                        RichEditor::make('deskripsi')
                             ->required()
                             ->columnSpanFull(),
                     ])->columns(2),
@@ -76,7 +79,24 @@ class BarangMasukResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('nama_produk')
+                ->searchable(),
+                TextColumn::make('pengrajin'),
+                TextColumn::make('kategori'),
+                TextColumn::make('warna')
+                ->badge()
+                ->color(fn (string $state): string => match ($state) {
+                    'hitam' => 'gray',
+                    'merah' => 'warning',
+                    'biru' => 'success',
+                    'kuning' => 'danger',
+                }),
+                TextColumn::make('harga')
+                ->sortable(),
+                TextColumn::make('stok')
+                ->sortable(),
+                TextColumn::make('tanggal_masuk')
+                ->sortable(),
             ])
             ->filters([
                 //

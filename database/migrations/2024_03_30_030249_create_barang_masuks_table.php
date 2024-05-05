@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('deskripsi');
             $table->string('harga');
             $table->integer('stok');
+            $table->string('status');
             $table->date('tanggal_masuk');
             $table->timestamps();
         });

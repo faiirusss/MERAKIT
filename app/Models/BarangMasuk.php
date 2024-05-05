@@ -8,4 +8,18 @@ use Illuminate\Database\Eloquent\Model;
 class BarangMasuk extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'nama_produk',
+        'sku',
+        'pengrajin',
+        'kategori',
+        'warna',
+        'kondisi',
+        'deskripsi',
+        'harga',
+        'stok',
+        'tanggal_masuk',
+        'status',
+    ];
 }
