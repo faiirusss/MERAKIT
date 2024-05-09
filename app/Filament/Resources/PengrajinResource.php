@@ -24,7 +24,7 @@ class PengrajinResource extends Resource
     protected static ?string $navigationLabel = 'Pengrajin';
     protected static ?string $modelLabel = 'Pengrajin';
     protected static ?string $slug = 'pengrajin';
-    protected static ?string $navigationGroup = 'Management';
+    protected static ?string $navigationGroup = 'User Management';
     protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form

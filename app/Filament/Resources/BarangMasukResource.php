@@ -9,8 +9,6 @@ use Filament\Tables\Table;
 use App\Models\BarangMasuk;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\TextInput;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\BarangMasukResource\Pages;
 use App\Filament\Resources\BarangMasukResource\RelationManagers;
 use Filament\Forms\Components\DatePicker;
@@ -19,6 +17,7 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 
 class BarangMasukResource extends Resource
 {
@@ -27,7 +26,7 @@ class BarangMasukResource extends Resource
     protected static ?string $navigationLabel = 'Barang Masuk';
     protected static ?string $modelLabel = 'Barang Masuk';
     protected static ?string $slug = 'barang-masuk';
-    protected static ?string $navigationGroup = 'Management';
+    protected static ?string $navigationGroup = 'Product Management';
     protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
@@ -39,6 +38,8 @@ class BarangMasukResource extends Resource
                         TextInput::make('pengrajin')
                             ->required(),
                         DatePicker::make('tanggal_masuk')
+                            ->native(false)
+                            ->displayFormat('d/m/Y')
                             ->required(),
                     ])->columns(2),
                 Section::make('Informasi Produk')
@@ -47,7 +48,11 @@ class BarangMasukResource extends Resource
                             ->required(),
                         TextInput::make('warna')
                             ->required(),
-                        TextInput::make('kategori')
+                        Select::make('kategori_id')
+                            ->relationship('kategori', 'kategori_name')
+                            ->native(false)
+                            ->searchable()
+                            ->preload()
                             ->required(),
                         Select::make('kondisi')
                             ->options([
@@ -82,7 +87,7 @@ class BarangMasukResource extends Resource
                 TextColumn::make('nama_produk')
                 ->searchable(),
                 TextColumn::make('pengrajin'),
-                TextColumn::make('kategori'),
+                TextColumn::make('kategori.kategori_name'),
                 TextColumn::make('warna')
                 ->badge()
                 ->color(fn (string $state): string => match ($state) {
@@ -99,7 +104,10 @@ class BarangMasukResource extends Resource
                 ->sortable(),
             ])
             ->filters([
-                //
+                SelectFilter::make('Kategori')
+                ->relationship('kategori', 'kategori_name')
+                ->native(false)
+                ->preload(),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

@@ -16,15 +16,15 @@ return new class extends Migration
             $table->string('nama_produk');
             $table->string('sku');
             $table->string('pengrajin');
-            $table->string('kategori');
             $table->string('warna');
+            $table->foreignId('kategori_id')->constrained('kategoris')->cascadeOnDelete();
             $table->string('kondisi');
             $table->string('deskripsi');
             $table->string('harga');
             $table->integer('stok');
             $table->string('status');
             $table->date('tanggal_masuk');
-            $table->timestamps();
+            $table->timestamps();            
         });
     }
 

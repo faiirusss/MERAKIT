@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BarangKeluarResource\Pages;
-use App\Filament\Resources\BarangKeluarResource\RelationManagers;
-use App\Models\BarangKeluar;
+use App\Filament\Resources\ReportBarangKeluarResource\Pages;
+use App\Filament\Resources\ReportBarangKeluarResource\RelationManagers;
+use App\Models\ReportBarangKeluar;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,16 +13,13 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class BarangKeluarResource extends Resource
+class ReportBarangKeluarResource extends Resource
 {
-    protected static ?string $model = BarangKeluar::class;
-    protected static ?string $navigationIcon = 'heroicon-o-truck';
-    protected static ?string $navigationLabel = 'Barang Keluar';
-    protected static ?string $modelLabel = 'Barang keluar';
-    protected static ?string $slug = 'barang-keluar';
-    protected static ?string $navigationGroup = 'Product Management';
-    protected static ?int $navigationSort = 2;
+    protected static ?string $model = ReportBarangKeluar::class;
 
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationGroup = 'Reports';
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
@@ -42,7 +39,6 @@ class BarangKeluarResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -62,10 +58,9 @@ class BarangKeluarResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBarangKeluars::route('/'),
-            'create' => Pages\CreateBarangKeluar::route('/create'),
-            'view' => Pages\ViewBarangKeluar::route('/{record}'),
-            'edit' => Pages\EditBarangKeluar::route('/{record}/edit'),
+            'index' => Pages\ListReportBarangKeluars::route('/'),
+            'create' => Pages\CreateReportBarangKeluar::route('/create'),
+            'edit' => Pages\EditReportBarangKeluar::route('/{record}/edit'),
         ];
     }
 }

@@ -35,7 +35,12 @@ class AdminPanelProvider extends PanelProvider
                 'warning' => Color::Orange,
                 'primary' => Color::Indigo,
             ])
-            ->font('Poppins')
+            ->font('Inter')
+            ->navigationGroups([
+                'Product Management',
+                'User Management',
+                'Reports',
+            ])
             ->brandName('MERAKIT')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
