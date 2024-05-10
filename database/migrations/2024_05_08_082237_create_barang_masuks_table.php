@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama_produk');
             $table->string('sku');
-            $table->string('pengrajin');
+            $table->foreignId('pengrajin_id')->constrained('pengrajins')->cascadeOnDelete();
             $table->string('warna');
             $table->foreignId('kategori_id')->constrained('kategoris')->cascadeOnDelete();
             $table->string('kondisi');
@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('stok');
             $table->string('status');
             $table->date('tanggal_masuk');
+            $table->string('foto');
             $table->timestamps();            
         });
     }

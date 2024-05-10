@@ -17,8 +17,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('nomor');
             $table->date('start_at');
-            $table->string('status');
-            $table->string('performa');
+            $table->string('status')->default('Active');
             $table->timestamps();
         });
     }

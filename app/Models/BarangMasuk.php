@@ -13,7 +13,7 @@ class BarangMasuk extends Model
     protected $fillable = [
         'nama_produk',
         'sku',
-        'pengrajin',
+        'pengrajin_id',
         'kategori_id',
         'warna',
         'kondisi',
@@ -22,10 +22,16 @@ class BarangMasuk extends Model
         'stok',
         'tanggal_masuk',
         'status',
+        'foto'
     ];
 
     public function kategori(): BelongsTo
     {
         return $this->belongsTo(Kategori::class, 'kategori_id', 'id');
+    }
+
+    public function pengrajin(): BelongsTo
+    {
+        return $this->belongsTo(Pengrajin::class);
     }
 }

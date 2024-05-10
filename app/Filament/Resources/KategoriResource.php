@@ -20,7 +20,7 @@ class KategoriResource extends Resource
     protected static ?string $model = Kategori::class;
 
     protected static ?string $navigationLabel = 'Kategori';
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-tag';
     protected static ?string $modelLabel = 'Kategori Barang';
     protected static ?string $slug = 'kategori-barang';
     protected static ?string $navigationGroup = 'Product Management';
@@ -46,7 +46,8 @@ class KategoriResource extends Resource
                 TextColumn::make('kategori_name')
                 ->label('Nama Kategori')
                 ->searchable(),
-                TextColumn::make('Jumlah Barang Masuk')->counts('BarangMasuk')
+                TextColumn::make('barangmasuk_count')->counts('barangmasuk')
+                ->label('Total Barang Masuk'),
             ])
             ->filters([
                 //

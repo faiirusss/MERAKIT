@@ -13,6 +13,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -33,22 +34,17 @@ class PengrajinResource extends Resource
             ->schema([
                 Section::make('Informasi Pengrajin')
                     ->schema([
-                        TextInput::make('Nama')
+                        TextInput::make('nama')
+                            ->maxLength(255)
                             ->required(),
-                        TextInput::make('Email')
+                        TextInput::make('email')
                             ->email()
                             ->required(),
-                        TextInput::make('Telepon')
+                        TextInput::make('nomor')
+                            ->tel()
                             ->required(),
-                        DatePicker::make('Tanggal')
-                            ->required(),
-                        Select::make('Status')
-                            ->options([
-                                'active' => 'Active',
-                                'inactive' => 'InActive'
-                            ])
-                            ->native(false)
-                            ->required()
+                        DatePicker::make('start_at')
+                            ->required(),                        
                     ])->columns(2),
             ]);
     }
@@ -57,7 +53,16 @@ class PengrajinResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('No')
+                ->rowIndex(),
+                TextColumn::make('nama')
+                ->searchable(),
+                TextColumn::make('email'),
+                TextColumn::make('nomor'),
+                TextColumn::make('start_at')
+                ->date(),
+                TextColumn::make('barangmasuk_count')->counts('barangmasuk')
+                ->label('Total Barang Dikirim'),
             ])
             ->filters([
                 //

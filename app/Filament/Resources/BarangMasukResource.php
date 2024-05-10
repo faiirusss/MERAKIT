@@ -11,6 +11,7 @@ use Filament\Resources\Resource;
 use Filament\Forms\Components\TextInput;
 use App\Filament\Resources\BarangMasukResource\Pages;
 use App\Filament\Resources\BarangMasukResource\RelationManagers;
+use App\Models\Kategori;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
@@ -35,8 +36,26 @@ class BarangMasukResource extends Resource
             ->schema([
                 Section::make('Informasi Pengrajin')
                     ->schema([
-                        TextInput::make('pengrajin')
-                            ->required(),
+                        Select::make('pengrajin_id')
+                        ->relationship(name: 'pengrajin', titleAttribute: 'nama', ignoreRecord: true)
+                        ->createOptionForm([
+                            TextInput::make('nama')
+                                ->maxLength(255)
+                                ->required(),
+                            TextInput::make('email')
+                                ->email()
+                                ->required(),
+                            TextInput::make('nomor')
+                                ->tel()
+                                ->required(),
+                            DatePicker::make('start_at')
+                                ->required(), 
+                            ])
+                        ->noSearchResultsMessage('Pengrajin tidak ada.')                            
+                        ->native(false)
+                        ->searchable()
+                        ->preload()
+                        ->required(),
                         DatePicker::make('tanggal_masuk')
                             ->native(false)
                             ->displayFormat('d/m/Y')
@@ -49,7 +68,12 @@ class BarangMasukResource extends Resource
                         TextInput::make('warna')
                             ->required(),
                         Select::make('kategori_id')
-                            ->relationship('kategori', 'kategori_name')
+                            ->relationship(name: 'kategori', titleAttribute: 'kategori_name', ignoreRecord: true)
+                            ->createOptionForm([
+                                TextInput::make('kategori_name')
+                                ->required()
+                            ])
+                            ->noSearchResultsMessage('Kategori tidak tersedia.')                            
                             ->native(false)
                             ->searchable()
                             ->preload()
@@ -76,6 +100,9 @@ class BarangMasukResource extends Resource
                         RichEditor::make('deskripsi')
                             ->required()
                             ->columnSpanFull(),
+                        FileUpload::make('foto')
+                            ->columnSpanFull()
+                            ->required(),
                     ])->columns(2),
             ]);
     }
@@ -86,7 +113,7 @@ class BarangMasukResource extends Resource
             ->columns([
                 TextColumn::make('nama_produk')
                 ->searchable(),
-                TextColumn::make('pengrajin'),
+                TextColumn::make('pengrajin.nama'),
                 TextColumn::make('kategori.kategori_name'),
                 TextColumn::make('warna')
                 ->badge()
@@ -106,6 +133,10 @@ class BarangMasukResource extends Resource
             ->filters([
                 SelectFilter::make('Kategori')
                 ->relationship('kategori', 'kategori_name')
+                ->native(false)
+                ->preload(),
+                SelectFilter::make('Pengrajin')
+                ->relationship('pengrajin', 'nama')
                 ->native(false)
                 ->preload(),
             ])
