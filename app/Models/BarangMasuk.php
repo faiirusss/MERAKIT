@@ -11,14 +11,12 @@ class BarangMasuk extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nama_produk',
+        'produk_id',
         'sku',
         'pengrajin_id',
-        'kategori_id',
         'warna',
         'kondisi',
         'deskripsi',
-        'harga',
         'stok',
         'tanggal_masuk',
         'status',
@@ -32,6 +30,11 @@ class BarangMasuk extends Model
 
     public function pengrajin(): BelongsTo
     {
-        return $this->belongsTo(Pengrajin::class);
+        return $this->belongsTo(Pengrajin::class, 'pengrajin_id', 'id');
+    }
+
+    public function produk(): BelongsTo
+    {
+        return $this->belongsTo(Produk::class);
     }
 }

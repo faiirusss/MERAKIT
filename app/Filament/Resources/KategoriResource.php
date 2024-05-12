@@ -24,7 +24,7 @@ class KategoriResource extends Resource
     protected static ?string $modelLabel = 'Kategori Barang';
     protected static ?string $slug = 'kategori-barang';
     protected static ?string $navigationGroup = 'Product Management';
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 4;
 
 
     public static function form(Form $form): Form
@@ -46,8 +46,8 @@ class KategoriResource extends Resource
                 TextColumn::make('kategori_name')
                 ->label('Nama Kategori')
                 ->searchable(),
-                TextColumn::make('barangmasuk_count')->counts('barangmasuk')
-                ->label('Total Barang Masuk'),
+                // TextColumn::make('barangmasuk_count')->counts('barangmasuk')
+                // ->label('Total Barang Masuk'),
             ])
             ->filters([
                 //

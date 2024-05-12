@@ -37,7 +37,7 @@ class BarangMasukResource extends Resource
                 Section::make('Informasi Pengrajin')
                     ->schema([
                         Select::make('pengrajin_id')
-                        ->relationship(name: 'pengrajin', titleAttribute: 'nama', ignoreRecord: true)
+                        ->relationship(name: 'pengrajin', titleAttribute: 'nama')
                         ->createOptionForm([
                             TextInput::make('nama')
                                 ->maxLength(255)
@@ -61,32 +61,53 @@ class BarangMasukResource extends Resource
                             ->displayFormat('d/m/Y')
                             ->required(),
                     ])->columns(2),
+
                 Section::make('Informasi Produk')
                     ->schema([
-                        TextInput::make('nama_produk')
+
+                        Select::make('produk_id')
+                            ->relationship('produk', 'nama_produk')
+                            ->searchable()
+                            ->createOptionForm([
+                                TextInput::make('nama_produk'),
+
+                                Select::make('kategori_id')
+                                ->relationship('kategori','kategori_name')
+                                ->createOptionForm([
+                                    TextInput::make('kategori_name')
+                                    ->required()
+                                ])
+                                ->preload()
+                                ->searchable()
+                                ->native(false),
+
+                                TextInput::make('harga')
+                                ->numeric()
+                                ->required()
+                            ])
+                            ->native(false)
+                            ->preload()
                             ->required(),
                         TextInput::make('warna')
                             ->required(),
-                        Select::make('kategori_id')
-                            ->relationship(name: 'kategori', titleAttribute: 'kategori_name', ignoreRecord: true)
-                            ->createOptionForm([
-                                TextInput::make('kategori_name')
-                                ->required()
-                            ])
-                            ->noSearchResultsMessage('Kategori tidak tersedia.')                            
-                            ->native(false)
-                            ->searchable()
-                            ->preload()
-                            ->required(),
+                        // Select::make('kategori_id')
+                        //     ->relationship(name: 'kategori', titleAttribute: 'kategori_name')
+                        //     ->createOptionForm([
+                        //         TextInput::make('kategori_name')
+                        //         ->required()
+                        //     ])
+                        //     ->noSearchResultsMessage('Kategori tidak tersedia.')                            
+                        //     ->native(false)
+                        //     ->searchable()
+                        //     ->preload()
+                        //     ->required(),
                         Select::make('kondisi')
                             ->options([
                                 'Baru' => 'Baru',
                                 'Bekas' => 'Bekas'
                             ])
                             ->native(false)
-                            ->required(),
-                        TextInput::make('harga')
-                            ->required(),
+                            ->required(),                        
                         TextInput::make('status')
                             ->label('Status Barang')
                             ->placeholder('Aktif')
@@ -111,10 +132,10 @@ class BarangMasukResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('nama_produk')
+                TextColumn::make('produk.nama_produk')
                 ->searchable(),
                 TextColumn::make('pengrajin.nama'),
-                TextColumn::make('kategori.kategori_name'),
+                TextColumn::make('produk.kategori.kategori_name')->label('Kategori'),
                 TextColumn::make('warna')
                 ->badge()
                 ->color(fn (string $state): string => match ($state) {
@@ -123,7 +144,7 @@ class BarangMasukResource extends Resource
                     'biru' => 'success',
                     'kuning' => 'danger',
                 }),
-                TextColumn::make('harga')
+                TextColumn::make('produk.harga')
                 ->sortable(),
                 TextColumn::make('stok')
                 ->sortable(),
@@ -141,8 +162,11 @@ class BarangMasukResource extends Resource
                 ->preload(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

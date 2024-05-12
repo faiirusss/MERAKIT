@@ -7,22 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Kategori extends Model
+class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'kategori_name',
-    ];
+    protected $guarded = ['id'];
 
-    public function barangmasuk(): hasMany
+    public function customer(): BelongsTo
     {
-        return $this->hasMany(BarangMasuk::class);
+        return $this->belongsTo(Customer::class);
     }
 
-    public function produk(): HasMany
+    public function items(): HasMany
     {
-        return $this->hasMany(Produk::class);
+        return $this->hasMany(OrderItem::class);
     }
-
 }

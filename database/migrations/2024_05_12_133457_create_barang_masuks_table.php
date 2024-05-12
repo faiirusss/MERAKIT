@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('barang_masuks', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_produk');
+            $table->foreignId('produk_id')->constrained('produks')->cascadeOnDelete();
             $table->string('sku');
             $table->foreignId('pengrajin_id')->constrained('pengrajins')->cascadeOnDelete();
             $table->string('warna');
-            $table->foreignId('kategori_id')->constrained('kategoris')->cascadeOnDelete();
+            // $table->foreignId('kategori_id')->constrained('kategoris')->cascadeOnDelete();
             $table->string('kondisi');
             $table->string('deskripsi');
-            $table->string('harga');
+            // $table->string('harga');
             $table->integer('stok');
             $table->string('status');
             $table->date('tanggal_masuk');
